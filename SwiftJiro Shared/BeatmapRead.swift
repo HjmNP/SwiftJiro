@@ -22,8 +22,8 @@ var level = 0
 class ReadBeatMap{
     public static func readBeatMap(filepath: String) -> Void {
         let path = NSDataAsset.init(name: NSDataAsset.Name(rawValue: filepath))
-        let string = String(data: (path?.data)!, encoding: String.Encoding.utf8)
-        let splited = string?.components(separatedBy: ":")
+        let string = String(data: (path?.data)!, encoding: String.Encoding.utf8)//get data in asset file
+        let splited = string?.components(separatedBy: "\r\n")
         title = findTag(data: splited!, tagName: "TITLE")
         subtitle = findTag(data: splited!, tagName: "SUBTITLE")
         bpm = Double(findTag(data: splited!, tagName: "BPM"))!
@@ -40,16 +40,11 @@ class ReadBeatMap{
     public static func findTag(data: [String], tagName: String) -> String {
         var tmp = ""
         for i in 0..<data.count {
-            if data[i] == tagName{
-                tmp = data[i+1].components(separatedBy: "\r\n")[0]
-                break
-            }
-            let tmp2 = data[i+1].components(separatedBy: "\r\n")
-            if tmp2[1] == tagName{
-                tmp = data[i+2].components(separatedBy: "\r\n")[0]
-                break
+            let tmp2 = data[i].components(separatedBy: ":")
+            if tmp2[0] == tagName{
+                tmp = tmp2[1]
             }
         }
         return tmp
-    }
+    }//find string after tag
 }
