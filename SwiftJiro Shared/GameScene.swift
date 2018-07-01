@@ -8,13 +8,12 @@
 
 import SpriteKit
 
+
+
 class GameScene: SKScene {
-    
-    
     fileprivate var label : SKLabelNode?
     fileprivate var spinnyNode : SKShapeNode?
 
-    
     class func newGameScene() -> GameScene {
         // Load 'GameScene.sks' as an SKScene.
         guard let scene = SKScene(fileNamed: "GameScene") as? GameScene else {

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		451613D920E7E1AB0027F09D /* BeatmapRead.swift in Sources */ = {isa = PBXBuildFile; fileRef = 451613D820E7E1AB0027F09D /* BeatmapRead.swift */; };
+		451613DA20E7E1AB0027F09D /* BeatmapRead.swift in Sources */ = {isa = PBXBuildFile; fileRef = 451613D820E7E1AB0027F09D /* BeatmapRead.swift */; };
 		45A98B1020E1E23E001B384F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45A98B0F20E1E23E001B384F /* AppDelegate.swift */; };
 		45A98B1220E1E23E001B384F /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45A98B1120E1E23E001B384F /* GameViewController.swift */; };
 		45A98B1520E1E23E001B384F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 45A98B1320E1E23E001B384F /* Main.storyboard */; };
@@ -25,6 +27,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		451613D820E7E1AB0027F09D /* BeatmapRead.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeatmapRead.swift; sourceTree = "<group>"; };
 		45A98B0420E1E23D001B384F /* Actions.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Actions.sks; sourceTree = "<group>"; };
 		45A98B0520E1E23D001B384F /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
 		45A98B0620E1E23D001B384F /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
@@ -77,6 +80,7 @@
 				45A98B0520E1E23D001B384F /* GameScene.sks */,
 				45A98B0620E1E23D001B384F /* GameScene.swift */,
 				45A98B0720E1E23E001B384F /* Assets.xcassets */,
+				451613D820E7E1AB0027F09D /* BeatmapRead.swift */,
 			);
 			path = "SwiftJiro Shared";
 			sourceTree = "<group>";
@@ -220,6 +224,7 @@
 			files = (
 				45A98B2C20E1E23E001B384F /* GameScene.swift in Sources */,
 				45A98B1220E1E23E001B384F /* GameViewController.swift in Sources */,
+				451613D920E7E1AB0027F09D /* BeatmapRead.swift in Sources */,
 				45A98B1020E1E23E001B384F /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -230,6 +235,7 @@
 			files = (
 				45A98B2D20E1E23E001B384F /* GameScene.swift in Sources */,
 				45A98B2320E1E23E001B384F /* GameViewController.swift in Sources */,
+				451613DA20E7E1AB0027F09D /* BeatmapRead.swift in Sources */,
 				45A98B2120E1E23E001B384F /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -379,7 +385,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = WHTY8G44B7;
 				INFOPLIST_FILE = "SwiftJiro iOS/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -400,7 +406,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = WHTY8G44B7;
 				INFOPLIST_FILE = "SwiftJiro iOS/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -427,7 +433,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				PRODUCT_BUNDLE_IDENTIFIER = com.HjmNp.SwiftJiro;
 				PRODUCT_NAME = SwiftJiro;
 				SDKROOT = macosx;
@@ -448,7 +454,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				PRODUCT_BUNDLE_IDENTIFIER = com.HjmNp.SwiftJiro;
 				PRODUCT_NAME = SwiftJiro;
 				SDKROOT = macosx;
