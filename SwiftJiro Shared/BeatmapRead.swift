@@ -13,7 +13,7 @@ var title = ""
 var subtitle = ""
 var bpm = 0.111
 var wave = ""
-var offset = ""
+var offset = 0.1
 var songvol = ""
 var sevol = ""
 var demostart = ""
@@ -28,11 +28,13 @@ class ReadBeatMap{
         subtitle = findTag(data: splited!, tagName: "SUBTITLE")
         bpm = Double(findTag(data: splited!, tagName: "BPM"))!
         wave = findTag(data: splited!, tagName: "WAVE")
+        offset = Double(findTag(data: splited!, tagName: "OFFSET"))!
         level = Int(findTag(data: splited!, tagName: "LEVEL"))!
         print(title)
         print(subtitle)
         print(bpm)
         print(wave)
+        print(offset)
         print(level)
     }
     public static func findTag(data: [String], tagName: String) -> String {
