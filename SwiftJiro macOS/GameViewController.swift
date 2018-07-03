@@ -11,15 +11,13 @@ import SpriteKit
 import GameplayKit
 
 class GameViewController: NSViewController {
-
     override func viewDidLoad() {
         super.viewDidLoad()
         let scene = GameScene.newGameScene()
-        ReadBeatMap.readBeatMap(filepath: "Got more raves?")
+        self.preferredContentSize = NSMakeSize(1280, 720)
         // Present the scene
         let skView = self.view as! SKView
         skView.presentScene(scene)
-        
         skView.ignoresSiblingOrder = true
         
         skView.showsFPS = true
