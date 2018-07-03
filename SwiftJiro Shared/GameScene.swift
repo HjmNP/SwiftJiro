@@ -28,13 +28,16 @@ class GameScene: SKScene {
     }
     
     func setUpScene() {
-        ReadBeatMap.readFile(filepath: "Got more raves?")
+        
+        let beatmap = Beatmap(filePath: "Got more raves?") // 이렇게 선언해서
+        
+        //ReadBeatMap.readFile(filepath: "Got more raves?")
         // Get label node from scene and store it for use later
         self.label = self.childNode(withName: "//helloLabel") as? SKLabelNode
         if let label = self.label {
             label.alpha = 0.0
             label.run(SKAction.fadeIn(withDuration: 2.0))
-            label.text = title
+            label.text = beatmap.title // 이렇게 써먹을 수 있다.
         }
         
         // Create shape node to use during mouse interaction
