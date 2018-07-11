@@ -8,9 +8,12 @@
 //
 
 import Foundation
-import Cocoa     //<-- Cocoa는 iOS에서 사용 못함. 아래에 UIKit을 추가해 놓음.
-//import UIKit          근데, UIKit은 또 macOS에서 사용 못함. 일단 짠거 보니까 Cocoa 맞춤이길래 Cocoa만 남겨놓겟는데, 나중에 그냥 iOS랑 macOS 따로 프로젝트를 떼어놓으셈.
-//                      앞으로 macOS 앱에서 UIKit 지원해준다는 발표가 나오긴 했는데 그거 모하비 정식때나 일어날 일이니까 지금은 어쩔 수 없음 ㅠㅠ
+#if os(OSX)
+import Cocoa     
+#endif
+#if os(iOS)
+import UIKit
+#endif
 
 // SwiftJiro Shared 라는 이름으로 보아 macOS랑 iOS 공용으로 사용할 함수를 정의한 모양인데
 // 그럴거면 한개의 프로젝트 파일에 iOS랑 macOS를 같이 끼우는게 아니라
@@ -75,8 +78,12 @@ class Beatmap{           //"BeatmapRead" 같은 제목은 클래스 이름으로
     
     convenience init(filePath: String) {
         self.init()
-        
+        #if os(macOS)
         let path = NSDataAsset.init(name: NSDataAsset.Name(rawValue: filePath))
+        #endif
+        #if os(iOS)
+        let path = NSDataAsset.init(name: filePath)
+        #endif
         let string = String(data: (path?.data)!, encoding: String.Encoding.utf8) //get data in asset file
         let splited = string?.components(separatedBy: "\r\n")
         
@@ -90,15 +97,15 @@ class Beatmap{           //"BeatmapRead" 같은 제목은 클래스 이름으로
         
         title = findTag(data: splited!, tag: .title)!           // 그리고 이게 바로 위 의견에 대한 반영결과
         subtitle = findTag(data: splited!, tag: .subtitle)!     // 사실 옵셔널 처리도 해야하지만, 너가직접 하는게 좋을거 같아서 모두 강제 언랲 했음
-        bpm = findTag(data: splited!, tag: .bpm)!
+        bpm = Double(findTag(data: splited!, tag: .bpm)!as String)!
         wave = findTag(data: splited!, tag: .wave)!             // 옵셔널은 어떻게 처리하는 것이 현명한가? 그건 스스로 알아야 하는게 커서
-        offset = findTag(data: splited!, tag: .offset)!         // 설명이 어렵기도 하고 ㅎ
-        level = findTag(data: splited!, tag: .level)!
+        offset = Double(findTag(data: splited!, tag: .offset)!as String)!         // 설명이 어렵기도 하고 ㅎ
+        level = Int(findTag(data: splited!, tag: .level)!)!
         
 //        nowBeatmap = getBeatMap(data: splited!, difficulty: "Oni")      // 얘도 비슷한 방식으로 수정
         
         
-        
+        noteData = getBeatMap(data: splited!, for: .oni)
     }
     
     enum Tags: String{                  // 이런 값들을 enum으로 묶어주면
@@ -160,11 +167,11 @@ class Beatmap{           //"BeatmapRead" 같은 제목은 클래스 이름으로
     
     
     enum Difficulty: String{
-        case kantan = "Kantan"
-        case futsuu = "Futsuu"
-        case muzukashii = "Muzukashii"
+        case easy = "Easy"
+        case Normal = "Normal"
+        case Hard = "Hard"
         case oni = "Oni"
-        case ura = "Ura"
+        case edit = "Edit"
     }
     
     public func getBeatMap(data: [String], for level: Difficulty) -> [String] {
@@ -188,6 +195,7 @@ class Beatmap{           //"BeatmapRead" 같은 제목은 클래스 이름으로
         for i in difficultyLine..<data.count{
             if data[i] == "#START"{
                 startLine = i
+                break;
             }
             
             if data[i] == "#END"{
@@ -195,7 +203,7 @@ class Beatmap{           //"BeatmapRead" 같은 제목은 클래스 이름으로
                 break               // #START 탐색때 같이 돌려도 되겠더라고
             }
         }
-        for i in startLine..<endLine{
+        for i in startLine..<endLine+1{
             //nowLine = i - startLine
             beatmapData.append(data[i])
         }
