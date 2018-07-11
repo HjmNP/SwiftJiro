@@ -195,7 +195,6 @@ class Beatmap{           //"BeatmapRead" 같은 제목은 클래스 이름으로
         for i in difficultyLine..<data.count{
             if data[i] == "#START"{
                 startLine = i
-                break;
             }
             
             if data[i] == "#END"{
