@@ -20,6 +20,10 @@ class GameScene: SKScene {
     fileprivate var nowbeat : Int!
     fileprivate var nowbar : Double!
     fileprivate var nowmetre : Double!
+    fileprivate var genTime : [Double] = []
+    fileprivate var noteType : [String] = []
+    fileprivate var startTime : DispatchTime = DispatchTime.now()
+    let queue = DispatchQueue(label: "gen", attributes: .concurrent)
     class func newGameScene() -> GameScene {
         // Load 'GameScene.sks' as an SKScene.
         guard let scene = SKScene(fileNamed: "GameScene") as? GameScene else {
@@ -34,8 +38,9 @@ class GameScene: SKScene {
     }
     
     func setUpScene() {
+        startTime = DispatchTime.now()
         nowbeat = 1
-        let beatmap = Beatmap(filePath: "Got more raves?") // 이렇게 선언해서
+        let beatmap = Beatmap(filePath: "Gargoyle Full Song") // 이렇게 선언해서
         bpm = beatmap.bpm
         //ReadBeatMap.readFile(filepath: "Got more raves?")
         // Get label node from scene and store it for use later
@@ -75,14 +80,16 @@ class GameScene: SKScene {
         
         if let rednoteNode = self.rednoteNode {
             rednoteNode.lineWidth = 2.0
-            rednoteNode.fillColor = NSColor.red
+            rednoteNode.fillColor = SKColor.red
         }
         if let bluenoteNode = self.bluenoteNode {
             bluenoteNode.lineWidth = 2.0
-            bluenoteNode.fillColor = NSColor.blue
+            bluenoteNode.fillColor = SKColor.blue
         }
         
-        genNote(noteData: beatmap.noteData)
+        queue.async(qos: .userInteractive) {
+            self.genNote(noteData: beatmap.noteData)
+        }
     }
     
     #if os(watchOS)
@@ -147,16 +154,8 @@ class GameScene: SKScene {
                 nowmetre = 300 / bpm!
                 for j in 0..<nowline.count {
                     nowbar = nowmetre * measure! * Double(j+1) / Double(nowline.count)
-                        if nowline[j] == "1" || nowline[j] == "3"{
-                                    DispatchQueue.main.asyncAfter(deadline: .now() + nowbar + nowmetre * measure! * Double(nowbeat)) {
-                            self.makeRednote(at: CGPoint(x: 400, y: 0), speed: self.scroll!)
-                            }
-                        }
-                        if nowline[j] == "2" || nowline[j] == "4"{
-                                    DispatchQueue.main.asyncAfter(deadline: .now() + nowbar + nowmetre * measure! * Double(nowbeat)) {
-                            self.makeBluenote(at: CGPoint(x: 400, y: 0), speed: self.scroll!)
-                            }
-                        }
+                    genTime.append(nowbar + nowmetre * measure! * Double(nowbeat))
+                    noteType.append(nowline[j])
                 }
             }
         }
@@ -164,7 +163,18 @@ class GameScene: SKScene {
     
     
     override func update(_ currentTime: TimeInterval) {
-        // Called before each frame is rendered
+        if (!(genTime == [])){
+        if (DispatchTime.now() >= startTime + genTime[0]){
+            genTime.remove(at: 0)
+            if (noteType[0] == "1" || noteType[0] == "3"){
+                makeRednote(at: CGPoint(x: 0, y: 0), speed: 1)
+            }
+            else if (noteType[0] == "2" || noteType[0] == "4"){
+                makeBluenote(at: CGPoint(x: 0, y: 0), speed: 1)
+            }
+            noteType.remove(at: 0)
+        }
+        }
     }
 }
 

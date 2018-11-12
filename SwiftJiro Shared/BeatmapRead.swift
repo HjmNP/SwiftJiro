@@ -79,13 +79,13 @@ class Beatmap{           //"BeatmapRead" 같은 제목은 클래스 이름으로
     convenience init(filePath: String) {
         self.init()
         #if os(macOS)
-        let path = NSDataAsset.init(name: NSDataAsset.Name(rawValue: filePath))
+        let path = NSDataAsset.init(name: filePath)
         #endif
         #if os(iOS)
         let path = NSDataAsset.init(name: filePath)
         #endif
         let string = String(data: (path?.data)!, encoding: String.Encoding.utf8) //get data in asset file
-        let splited = string?.components(separatedBy: "\r\n")
+        let splited = string?.components(separatedBy: "\n")
         
 //        title = findTag(data: splited!, tagName: "TITLE")               // findTag는 잘 만들었음 ㅇㅇ
 //        subtitle = findTag(data: splited!, tagName: "SUBTITLE")         // 아쉬운 점이라면 tagName이라는 이름은 불필요하게 길었던 점 ("tag" 만으로도 충분함)
