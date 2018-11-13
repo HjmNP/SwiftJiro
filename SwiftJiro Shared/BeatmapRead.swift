@@ -46,7 +46,7 @@ class Beatmap{           //"BeatmapRead" 같은 제목은 클래스 이름으로
     var scoreMode: String       // nowBeatmap 빼고 구조체로 묶는 것도 좋은 방법임
     var level: Int
     var noteData: [String]
-    
+    var splited : [String]?
     /**
      변수 이름 몇개를 좀 바꿨음
      
@@ -84,8 +84,19 @@ class Beatmap{           //"BeatmapRead" 같은 제목은 클래스 이름으로
         #if os(iOS)
         let path = NSDataAsset.init(name: filePath)
         #endif
-        let string = String(data: (path?.data)!, encoding: String.Encoding.utf8) //get data in asset file
-        let splited = string?.components(separatedBy: "\n")
+        let string = String(data: (path?.data)!, encoding: String.Encoding.utf8)
+        if (string?.contains("\r\n"))!{//get data in asset file
+            splited = string?.components(separatedBy: "\r\n")
+        }
+        else if (string?.contains("\n\r"))!{//get data in asset file
+            splited = string?.components(separatedBy: "\n\r")
+        }
+        else if (string?.contains("\r"))!{//get data in asset file
+            splited = string?.components(separatedBy: "\r")
+        }
+        else if (string?.contains("\n"))!{//get data in asset file
+            splited = string?.components(separatedBy: "\n")
+        }
         
 //        title = findTag(data: splited!, tagName: "TITLE")               // findTag는 잘 만들었음 ㅇㅇ
 //        subtitle = findTag(data: splited!, tagName: "SUBTITLE")         // 아쉬운 점이라면 tagName이라는 이름은 불필요하게 길었던 점 ("tag" 만으로도 충분함)

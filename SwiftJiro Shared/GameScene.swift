@@ -17,12 +17,12 @@ class GameScene: SKScene {
     fileprivate var measure : Double? = 4/4
     fileprivate var scroll : Double? = 1
     fileprivate var bpm : Double?
-    fileprivate var nowbeat : Int!
     fileprivate var nowbar : Double!
     fileprivate var nowmetre : Double!
     fileprivate var genTime : [Double] = []
     fileprivate var noteType : [String] = []
     fileprivate var startTime : DispatchTime = DispatchTime.now()
+    fileprivate var beatTime : Double! = 0
     let queue = DispatchQueue(label: "gen", attributes: .concurrent)
     class func newGameScene() -> GameScene {
         // Load 'GameScene.sks' as an SKScene.
@@ -33,14 +33,12 @@ class GameScene: SKScene {
         
         // Set the scale mode to scale to fit the window
         scene.scaleMode = .aspectFill
-        
         return scene
     }
     
     func setUpScene() {
         startTime = DispatchTime.now()
-        nowbeat = 1
-        let beatmap = Beatmap(filePath: "Gargoyle Full Song") // 이렇게 선언해서
+        let beatmap = Beatmap(filePath: "Got more raves?") // 이렇게 선언해서
         bpm = beatmap.bpm
         //ReadBeatMap.readFile(filepath: "Got more raves?")
         // Get label node from scene and store it for use later
@@ -149,31 +147,40 @@ class GameScene: SKScene {
                 bpm = Double(noteData[i].components(separatedBy: " ")[1])!
             }
             else {
-                nowbeat! = nowbeat + 1
                 let nowline = noteData[i].split(separator: ",")[0].map { String($0) }
                 nowmetre = 300 / bpm!
                 for j in 0..<nowline.count {
-                    nowbar = nowmetre * measure! * Double(j+1) / Double(nowline.count)
-                    genTime.append(nowbar + nowmetre * measure! * Double(nowbeat))
+                    nowbar = nowmetre * measure! * (Double(j) / Double(nowline.count))
+                    genTime.append(nowbar + nowmetre * measure! + beatTime)
                     noteType.append(nowline[j])
                 }
+                beatTime += nowmetre * measure!
+            }
+        }
+        checkGenTime()
+    }
+    func checkGenTime(){
+        for i in 0 ..< genTime.count-1 {
+            if(genTime[i]>genTime[i+1]){
+                print("wrong gen time")
             }
         }
     }
     
-    
     override func update(_ currentTime: TimeInterval) {
-        if (!(genTime == [])){
-        if (DispatchTime.now() >= startTime + genTime[0]){
-            genTime.remove(at: 0)
-            if (noteType[0] == "1" || noteType[0] == "3"){
-                makeRednote(at: CGPoint(x: 0, y: 0), speed: 1)
+        queue.async {
+            if (!(self.genTime == [])){
+                if (DispatchTime.now() >= self.startTime + self.genTime[0]){
+                    self.genTime.remove(at: 0)
+                    if (self.noteType[0] == "1" || self.noteType[0] == "3"){
+                        self.makeRednote(at: CGPoint(x: 200, y: 0), speed: 1)
+                    }
+                    else if (self.noteType[0] == "2" || self.noteType[0] == "4"){
+                        self.makeBluenote(at: CGPoint(x: 200, y: 0), speed: 1)
+                    }
+                    self.noteType.remove(at: 0)
+                }
             }
-            else if (noteType[0] == "2" || noteType[0] == "4"){
-                makeBluenote(at: CGPoint(x: 0, y: 0), speed: 1)
-            }
-            noteType.remove(at: 0)
-        }
         }
     }
 }
