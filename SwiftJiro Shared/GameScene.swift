@@ -23,6 +23,8 @@ class GameScene: SKScene {
     fileprivate var noteType : [String] = []
     fileprivate var startTime : DispatchTime = DispatchTime.now()
     fileprivate var beatTime : Double! = 0
+    fileprivate var nowgogo : Bool! = false
+    fileprivate var gogoTime : [Bool] = []
     let queue = DispatchQueue(label: "gen", attributes: .concurrent)
     class func newGameScene() -> GameScene {
         // Load 'GameScene.sks' as an SKScene.
@@ -50,7 +52,7 @@ class GameScene: SKScene {
         }
         
         // Create shape node to use during mouse interaction
-        let w = (self.size.width + self.size.height) * 0.05
+        let w = (self.size.width + self.size.height) * 0.025
         self.spinnyNode = SKShapeNode.init(rectOf: CGSize.init(width: w, height: w), cornerRadius: w * 0.3)
         
         if let spinnyNode = self.spinnyNode {
@@ -146,24 +148,37 @@ class GameScene: SKScene {
             else if noteData[i].split(separator: " ")[0] == "#BPMCHANGE"{
                 bpm = Double(noteData[i].components(separatedBy: " ")[1])!
             }
+            else if noteData[i].split(separator: " ")[0] == "#GOGOSTART"{
+                nowgogo = true
+            }
+            else if noteData[i].split(separator: " ")[0] == "#GOGOEND"{
+                nowgogo = false
+            }
             else {
                 let nowline = noteData[i].split(separator: ",")[0].map { String($0) }
                 nowmetre = 300 / bpm!
                 for j in 0..<nowline.count {
                     nowbar = nowmetre * measure! * (Double(j) / Double(nowline.count))
-                    genTime.append(nowbar + nowmetre * measure! + beatTime)
+                    genTime.append(nowbar + beatTime)
                     noteType.append(nowline[j])
+                    gogoTime.append(nowgogo)
                 }
                 beatTime += nowmetre * measure!
             }
         }
         checkGenTime()
+        checkNote()
     }
     func checkGenTime(){
         for i in 0 ..< genTime.count-1 {
             if(genTime[i]>genTime[i+1]){
                 print("wrong gen time")
             }
+        }
+    }
+    func checkNote(){
+        if(noteType.contains("#")){
+            print("wrong note type")
         }
     }
     
